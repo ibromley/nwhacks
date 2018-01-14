@@ -5,9 +5,11 @@ const addr = process.env.ADDR || "localhost:4000";
 const [host, port] = addr.split(":");
 
 
-app.get("/usertransactions/:name", (req, res) => {
+app.get("/test", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //return all not-completed tasks in the database
-    var myJSON = getUserTransactions(req.params.name);
+    let myJSON = getUserTransactions(req.params.name);
     res.json(myJSON);
     });
 
@@ -85,19 +87,18 @@ function getRandomInRange(from, to, fixed) {
 }
 
 function getUserTransactions (name){
-var count = 0;
-if (allUserTransactions != []) {
-  allUserTransactions = [];
-}
+  var count = 0;
+  if (allUserTransactions != []) {
+    allUserTransactions = [];
+  }
 
-for(i=0; i < transaction.length; i++ ){
-  if (transaction[i].user == name) {
-
-     allUserTransactions.push(transaction[i]);
+  for(let i = 0; i < transaction.length; i++) {
+    if (transaction[i].user == name) {
+       allUserTransactions.push(transaction[i]);
     }
   }
 
- return allUserTransactions;
+   return allUserTransactions;
 
 }
 
