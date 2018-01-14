@@ -9,7 +9,7 @@ var recco = new Vue({
     },
     methods: {
       updateReccoList: function() {
-          var url = `http://nwhacks-transactions.herokuapp.com/testrecco?name=${this.name}&lat=${this.lat}&lon=${this.lon}`;
+          var url = `https://nwhacks-transactions.herokuapp.com/testrecco?name=${this.name}&lat=${this.lat}&lon=${this.lon}`;
           return fetch(url)
               .then(response => response.json())
               .then(data => this.reccoList = data)
