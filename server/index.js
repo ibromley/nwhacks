@@ -11,6 +11,17 @@ app.get("/test", (req, res) => {
     res.send(myJSON);
 });
 
+app.get("/test2", (req, res) => {
+getUserTransactions("Bob");
+var d_start = new Date(2014, 10, 10, 10, 11, 19, 400);
+var d_end = new Date(2017, 10, 10, 10, 11, 19, 400);
+
+  graphTrans(transaction, "coffee", d_start, d_end, 49.2827, 123, 10000);
+  var myJSON = JSON.stringify(mapsTrans);
+  res.send(myJSON);
+
+});
+
 app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
 });
@@ -19,6 +30,7 @@ let allUserTransactions = [];
 let userNames = ["Alice", "Bob", "Chris", "Doris"];
 let items = ["coffee", "bagel", "sandwich", "milkshake", "water", "salad"]
 let transaction  = generateTransactions(500);
+let mapsTrans = []; // list of all valid transactions for graph or map
 
 function generateTransactions(num) {
   let trans = [num];
@@ -28,8 +40,8 @@ function generateTransactions(num) {
       item: items[getRandomInRange(0,5,0)],
       price: getRandomInRange(0.5, 30, 2),
       date: generateNewDate(),
-      lat: getRandomInRange(-180, 180, 3),
-      long: getRandomInRange(-90, 90, 3),
+      lat: getRandomInRange(48, 52, 4),
+      long: getRandomInRange(121, 125, 4),
     }
   }
   return trans;
@@ -77,3 +89,37 @@ for(i=0; i < transaction.length; i++ ){
  return allUserTransactions;
 
 };
+
+function graphTrans (transaction, item, startDate, endDate, lat, lon, radius){
+  for(i=0; i < transaction.length; i++ ){
+    if(transaction[i].item == item){
+      if(transaction[i].date.getFullYear() < endDate.getFullYear() && transaction[i].date.getFullYear() > startDate.getFullYear()){
+        if(transaction[i].date.getMonth() < endDate.getMonth() && transaction[i].date.getMonth() > startDate.getMonth()){
+          if(transaction[i].date.getDate() < endDate.getDate() && transaction[i].date.getDate() > startDate.getDate()){
+            if (isInsideBox(lat, lon, radius, transaction[i].lat, transaction[i].lon) == true){
+
+              mapsTrans.push(transcation[i]);
+            }
+          }
+        }
+      }
+    }
+    }
+};
+
+function isInside(latCenter, lonCenter, radius, latTest, lonTest){
+  let r = 6371000;
+  let dlon = lonTest - lonCenter;
+  let dlat = latTest - latCenter;
+  let a = Math.pow((Math.sin(dlat/2)), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow( (Math.sin(dlon/2)), 2);
+  let c = 2 * Math.pow(Math.atan( Math.sqrt(a), Math.sqrt(1-a) ), 2);
+  let d = r * c; //(where R is the radius of the Earth)
+  if (d <= radius){return 1;}
+  else {return 0;}
+};
+
+function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
+  if( latCenter+radius < latTest && latCenter - radius > latTest && lonCenter+radius < lonTest && lonCenter - radius > lonTest  )
+  {return true;}
+  else{return false;}
+}

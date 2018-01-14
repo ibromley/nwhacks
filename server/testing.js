@@ -1,6 +1,6 @@
 
 
-
+/*
 let mapsTrans = []; // list of all valid transactions for graph
 
 function graphTrans (transaction, item, startDate, endDate, lat, lon, radius){
@@ -29,3 +29,4 @@ function isInside(latCenter, lonCenter, radius, latTest, lonTest){
   if (d <= radius){return 1;}
   else {return 0;}
 }
+*/
