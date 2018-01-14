@@ -159,32 +159,34 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
 /*
  function reccomendation(user) {
 //assuming one user data exissts
-let arr = [{item, count}];
-for (i=0, i<data.length);i++){
-if (arr.includes({data[i].item}, /[0-9]+/)) {
-    for (j=0, j<arr.length); i++) {
-      if (arr[j].item == data[i].item) {
-        arr[j].count++;
-      }
-    } else {
-      arr.push({item: data[i],
-                count: 1});
+data = transaction;
+let arr = [];
+let suggested = [];
+let j = 0;
+for (let i=0; i < data.length; i++ ){
+  if (arr.includes({data[i].item, /[0-9]+/})) {
+      for (j=0; j<arr.length; j++) {
+        if (arr[j].item == data[i].item) { arr[j].count++; break;}
+          }
+    if (arr[j].item != data[i].item){   arr.push({item: data[i], count: 1});
     }
 }
 }
+
+arr.sort(function (x, y){    return x.count - y.count;}); // sort arr by highest count (suppoosedly)
+
+for (i=0; i<data.length; i++){
+    if( data[i].item == arr[0].item ||data[i].item == arr[2].item ||data[i].item == arr[1].item){
+      sugggested.push(data[i]);
+    }
+  }
+
+  return suggested;
 }
 
-//sorting 2d array by item commonality
-userCommonItems.sort(function (a, b){
 
-  if (a[1] === b[1]) {        return 0;    }
-  else {      return (a[1] > b[1]) ? -1 : 1;    }
-
-
-});
-console.log(userCommonItems[0], userCommonItems[1], userCommonItems[2]);
-}
 */
+
 
 
 function graphDataSimple(item){
