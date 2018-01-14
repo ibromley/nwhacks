@@ -5,11 +5,11 @@ const addr = process.env.ADDR || "localhost:4000";
 const [host, port] = addr.split(":");
 
 
-app.get("/test", (req, res) => {
+app.get("/usertransactions/:name", (req, res) => {
     //return all not-completed tasks in the database
-    var myJSON = JSON.stringify(getUserTransactions("Bob"));
-    res.send(myJSON);
-});
+    var myJSON = getUserTransactions(req.params.name);
+    res.json(myJSON);
+    });
 
 app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
@@ -100,12 +100,8 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
         }
       }
     }
-<<<<<<< HEAD
-    }
 
-};
-=======
->>>>>>> 6091694d94d0baba0b9fd01e501291db894f2fc2
+
 
 function isInside(latCenter, lonCenter, radius, latTest, lonTest){
   let r = 6371000;
