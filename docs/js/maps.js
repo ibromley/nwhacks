@@ -2,7 +2,7 @@ function loadMap() {
     // Initialize Google Maps
     const mapOptions = {
         center:new google.maps.LatLng(48.7949, -122.6976),
-        zoom: 7
+        zoom: 8
     }
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
