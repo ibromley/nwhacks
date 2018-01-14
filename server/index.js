@@ -7,7 +7,8 @@ const [host, port] = addr.split(":");
 
 app.get("/test", (req, res) => {
     //return all not-completed tasks in the database
-    res.send(getUserTransactions("Bob"));
+    var myJSON = JSON.stringify(getUserTransactions("Bob"));
+    res.send(myJSON);
 });
 
 app.listen(port, host, () => {
