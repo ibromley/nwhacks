@@ -22,7 +22,13 @@
 }
 
 #map {
-  height: calc(100vh - 64px);
+  height: 100vh;
+}
+
+header.demo-header {
+  min-height: 0;
+  max-height: 0;
+  overflow: hidden;
 }
 
 .demo-card-wide.mdl-card {
