@@ -1,33 +1,17 @@
-
-new Vue({
-    el: '#item-cards',
+var transTable = new Vue({
+    el: '#transactions-records',
     data: {
-       name: 'Hello Vue.js!'
+      transactions: []
     },
     methods: {
         getData: function() {
-        
-            var url = "http://localhost:4000/all"
-        
-            var objects = [];
-            fetch(url)
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(data) {
-                    console.log(data);
-                    objects = data;
-                })
-                .catch(function(err) {
-                    console.error(err);
-                    alert(err.message);
-            });
-        
-        }
+            var url = "http://localhost:4000/test"
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => this.transactions = data)
+                .catch(err => alert(err.message));
+        },
     },
-    beforeMount(){
-        this.getData()
-     },
-
-
 });
+
+transTable.getData().then(() => console.log(transTable.transactions)).catch(err => alert(err.message));

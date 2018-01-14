@@ -6,9 +6,11 @@ const [host, port] = addr.split(":");
 
 
 app.get("/test", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //return all not-completed tasks in the database
-    var myJSON = JSON.stringify(getUserTransactions("Bob"));
-    res.send(myJSON);
+    var myJSON = getUserTransactions("Bob");
+    res.json(myJSON);
 });
 
 app.get("/test2", (req, res) => {
@@ -77,16 +79,16 @@ function getRandomInRange(from, to, fixed) {
 }
 
 function getUserTransactions (name){
-var count = 0;
+  var count = 0;
+  allUserTransactions = [];
+  for(i=0; i < transaction.length; i++ ){
+    if (transaction[i].user == name) {
 
-for(i=0; i < transaction.length; i++ ){
-  if (transaction[i].user == name) {
-
-     allUserTransactions.push(transaction[i]);
+       allUserTransactions.push(transaction[i]);
+      }
     }
-  }
 
- return allUserTransactions;
+   return allUserTransactions;
 
 };
 
