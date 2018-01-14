@@ -105,6 +105,7 @@ function graphTrans (transaction, item, startDate, endDate, lat, lon, radius){
       }
     }
     }
+
 };
 
 function isInside(latCenter, lonCenter, radius, latTest, lonTest){
