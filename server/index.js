@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 
-const addr = process.env.ADDR || "localhost:4000";
-const [host, port] = addr.split(":");
+var port = process.env.PORT || 4000;
 
 let allUserTransactions = [];
 let userNames = ["Alice", "Bob", "Chris", "Doris"];
@@ -48,15 +47,22 @@ app.get("/test3/:lat&:item", (req, res) => {
 
 });
 
-app.get("/testfreq", (req, res) => {
+app.get("/testfreq/", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   graphDataSimple("coffee");
+  var frequency =   graphDataSimple(req.query.item); 
   res.json(frequency);
 });
 
-app.listen(port, host, () => {
-    console.log(`server is listening at http://${addr}....`);
+app.get("/testreg", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  var frequency =   reccomendation("Bob");
+  res.json(frequency);
+});
+
+app.listen(port, () => {
+    console.log(`server is listening at http://localhost:${port}....`);
 });
 
 function generateTransactions(num) {
@@ -156,35 +162,39 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
  }
 
 
-/*
+
  function reccomendation(user) {
 //assuming one user data exissts
-let arr = [{item, count}];
-for (i=0, i<data.length);i++){
-if (arr.includes({data[i].item}, /[0-9]+/)) {
-    for (j=0, j<arr.length); i++) {
-      if (arr[j].item == data[i].item) {
-        arr[j].count++;
-      }
-    } else {
-      arr.push({item: data[i],
-                count: 1});
+let arr = [{
+  item: transaction[0].item,
+  count: 1,
+}];
+var suggested = [];
+let j = 0;
+var regEx = /[0-9]+/i;
+for (let i=1; i < transaction.length; i++ ){
+  /*if (arr.includes({item: transaction[i].item,
+                    count: regEx,})) {*/
+      let indexed = 0;
+      for (j=0; j<arr.length; j++) {
+        if (arr[j].item != transaction[i].item) {}
+        else {  arr[j].count++; indexed = 1; }
+    //}
     }
-}
-}
+      if(indexed == 0) {arr.push({item: transaction[i].item, count: 1});}
 }
 
-//sorting 2d array by item commonality
-userCommonItems.sort(function (a, b){
+arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
+console.log(arr);
 
-  if (a[1] === b[1]) {        return 0;    }
-  else {      return (a[1] > b[1]) ? -1 : 1;    }
+for (k=0; k<transaction.length; k++){
+    if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
+      suggested.push(transaction[k]);
+    }
+  }
 
-
-});
-console.log(userCommonItems[0], userCommonItems[1], userCommonItems[2]);
+  return suggested;
 }
-*/
 
 
 function graphDataSimple(item){
@@ -198,7 +208,7 @@ function graphDataSimple(item){
   for(i = 0; i < transaction.length; i++) {
     if( transaction[i].item  == item){ //if items match,
       freq[transaction[i].date.getHours()].count++; //increment count on the hour
-    }
   }
-  return freq;
+  }
+return freq;
 }
