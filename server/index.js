@@ -196,7 +196,7 @@ for (let i=1; i < transaction.length; i++ ){
 arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
 console.log(arr);
 
-suggest[0].distance = getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon);
+suggested[0].distance = getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon);
 
 suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 *(1/getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon))
