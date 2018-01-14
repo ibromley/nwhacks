@@ -27,7 +27,7 @@ app.get("/test", (req, res) => {
 app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
-  reccomendation("Bob");
+  //reccomendation("Bob");
   graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
   var myJSON = mapsTrans;
   res.json(myJSON);
@@ -44,10 +44,10 @@ app.get("/test3/:lat&:item", (req, res) => {
 
 });
 
-app.get("/testfreq/:item", (req, res) => {
+app.get("/testfreq", (req, res) => {
 
-  var freq =   graphDataSimple(req.params.item);;
-  res.json(freq);
+  var frequency =   graphDataSimple("coffee");
+  res.json(frequency);
 });
 
 app.listen(port, host, () => {
@@ -183,13 +183,17 @@ console.log(userCommonItems[0], userCommonItems[1], userCommonItems[2]);
 
 
 function graphDataSimple(item){
-  let data = getUserTransactions();
-  let freq = [];
-  freq.length = 24;
-  for(i = 0; i <freq.length; i++ ){ freq[i] = 0;}
+  let freq = new Array(24);
+  for (let i = 0; i < freq.length; i++) {
+     freq[i] = {
+      count: 0,
+    }
+  }
 
-  for(i = 0; i < data.length; i++){
-    if( data[i].item  == item){ freq[getHour(data[i].date)]++;}
+  for(i = 0; i < transaction.length; i++) {
+    if( transaction[i].item  == item){ //if items match,
+      freq[transaction[i].date.getHours()].count++; //increment count on the hour
+    }
   }
   return freq;
 }
