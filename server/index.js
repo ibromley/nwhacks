@@ -8,6 +8,9 @@ let userNames = ["Alice", "Bob", "Chris", "Doris"];
 let items = ["coffee", "bagel", "sandwich", "milkshake", "water", "salad"];
 let transaction = generateTransactions(500);
 let mapsTrans = []; // list of all valid transactions for graph or map
+var username = "";
+var password = ""; 
+
 
 app.get("/trans", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -203,10 +206,17 @@ suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 //old return three highest user interactions
 for (k=0; k<transaction.length; k++){
     if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
-      suggested.push({item: transaction[k].item, date: transaction[k].date, price: transaction[k].price, lat: transaction[k].lat, lon: transaction[k].lon,
-        rank: arr[lookUp(transaction[k].item, arr)].count
+      suggested.push({
+          item: transaction[k].item,
+          date: transaction[k].date,
+          price: transaction[k].price,
+          lat: transaction[k].lat,
+          lon: transaction[k].lon,
+          distance: getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon),
+          rank: arr[lookUp(transaction[k].item, arr)].count
         *(1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon))
-        *(1/transaction[k].price) * freq(transaction[k].item, transaction) } );
+        *(1/transaction[k].price) * freq(transaction[k].item, transaction)
+    });
         console.log("lookup"+ arr[lookUp(transaction[k].item, arr)].count);
         console.log("dist"+ 1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon));
         console.log("price"+1/transaction[k].price);
@@ -269,7 +279,42 @@ function graphDataSimple(item){
   for(i = 0; i < transaction.length; i++) {
     if( transaction[i].item  == item){ //if items match,
       freq[transaction[i].date.getHours()].count++; //increment count on the hour
-  }
+    }
   }
 return freq;
+}
+
+function storePasswordInHeap() {
+  let regEx = /^[a-z][A-Z][0-9][\!\@\#\$\%\^\&\*].{6,15}$/g;
+  if (!password.match(regEx)) {
+      res.status(500).send({ error: 'Invalid password.' });
+  }
+
+  var hex = '0x';
+	for(var i = 0;i < password.length;i++) {
+		hex += str.charCodeAt(i).toString(16);
+	}
+  var val = hex % heap.length;
+  while (heap[val] != null) { //stay in loop while heap[val] is occupied
+    val += 2*(hex % heap.length);
+  }
+  heap[val] = {
+      username: username,
+      password: password,
+    };
+}
+
+function getPasswordFromHeap() {
+  var hex = '0x';
+	for(var i = 0;i < password.length;i++) {
+		hex += str.charCodeAt(i).toString(16);
+	}
+  var val = hex % heap.length;
+  while (heap[val] != null) {
+    if (heap[val].username != username && heap[val].password != password) {
+      val += 2*(hex % heap.length);
+    } else {
+      return heap[val];
+    }
+  } res.status(500).send({ error: 'No match.' });
 }
