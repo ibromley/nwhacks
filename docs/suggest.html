@@ -114,22 +114,22 @@
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-          <form id="recco_form">
+          <form v-on:submit.prevent="getData" id="recco_form">
               <div class="mdl-textfield mdl-js-textfield">
-                <input v-on:change="updatevalidity" class="mdl-textfield__input" type="text" id="sample1">
+                <input v-model="name" class="mdl-textfield__input" type="text" id="sample1">
                 <label class="mdl-textfield__label" for="sample1">Name</label>
               </div>
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input v-on:change="updatevalidity" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
+                  <input v-model="lat" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
                   <label class="mdl-textfield__label" for="sample4">Latitude</label>
                   <span class="mdl-textfield__error">Input is not a number!</span>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input v-on:change="updatevalidity" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
+                    <input v-model="lon" class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
                     <label class="mdl-textfield__label" for="sample4">Longitude</label>
                     <span class="mdl-textfield__error">Input is not a number!</span>
                   </div>
-                  <button v-bind.disabled="valid" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                  <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                       Find
                   </button>
                     
