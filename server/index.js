@@ -103,13 +103,9 @@ function getUserTransactions (name){
 }
 
 function graphTrans (data, item, startDate, endDate, lat, lon, radius){
-<<<<<<< HEAD
-
-=======
   if ( mapsTrans != []) {
     mapsTrans = [];
   }
->>>>>>> e24bc82c376cf3acd3b809aed6968092d421c860
   for(i=0; i < data.length; i++ ){
     if(data[i].item == item){
       if (data[i].date.getTime() > startDate.getTime() &&
