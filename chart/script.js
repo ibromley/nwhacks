@@ -1,5 +1,5 @@
 //var defaultBorderColour = "#3e95cd";
-
+let url = "http://localhost:4000/testfreq/?item=" + "salad";
 
 
 var hours = []; //x-axis label
@@ -12,34 +12,28 @@ console.log(hours);
 
 var items = [];
 var pathArray = [];
+pathArray = url.split("/"); //array of each directory from url
 console.log(pathArray);
-getJSONMarkers();
 var itemType = pathArray[pathArray.length -1].split("=")[1];
-
-console.log(itemType);
-console.log(items);
-
-function getJSONMarkers() {
-
-
-    url = "http://localhost:4000/testfreq/?item=" + "coffee";
-    pathArray = url.split("/"); //array of each directory from url
-    var newobject = fetch(url)
+var newobject = fetch(url)
         .then(response => response.json())
         .then(data => {
             transactions = data;
             transactions.forEach(o => {
 
-                let pins = {
+                let obj = {
                     count: o.count
                 }
-                console.log(pins);
-                items.push(pins.count);
+                console.log(obj);
+                items.push(obj.count);
             });
 
         })
     .catch(err => alert(err.message));
-}
+
+
+console.log(itemType);
+console.log(items);
 
 var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
