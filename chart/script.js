@@ -73,10 +73,10 @@ function demo(data) {
         for (j=0, j<arr.length); i++) {
           if (arr[j].item == data[i].item) {
             arr[j].count++;
-          }
-        } else {
-          arr.push({item: data[i],
-                    count: 1});
+          } else {
+            arr.push({item: data[i],
+                      count: 1});
+            }
         }
     }
   }
