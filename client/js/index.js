@@ -5,7 +5,7 @@ var transTable = new Vue({
     },
     methods: {
         getData: function() {
-            var url = "http://localhost:4000/test"
+            var url = "http://localhost:4000/test?name=Bob"
             return fetch(url)
                 .then(response => response.json())
                 .then(data => this.transactions = data)

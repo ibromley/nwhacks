@@ -11,7 +11,7 @@ app.get("/test", (req, res) => {
     //return all not-completed tasks in the database
     let myJSON = getUserTransactions(req.params.name);
     res.json(myJSON);
-    });
+});
 
 app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
@@ -97,9 +97,7 @@ function getUserTransactions (name){
        allUserTransactions.push(transaction[i]);
     }
   }
-
    return allUserTransactions;
-
 }
 
 function graphTrans (data, item, startDate, endDate, lat, lon, radius){

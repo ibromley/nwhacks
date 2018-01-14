@@ -16,7 +16,11 @@
 .item-text {
   width: 75%;
 }
-  
+
+#transactions-records {
+    padding-top: 32px;
+}
+
 .demo-card-wide.mdl-card {
   width: 512px;
 }
