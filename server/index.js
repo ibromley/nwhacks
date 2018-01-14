@@ -50,14 +50,14 @@ app.get("/test3/:lat&:item", (req, res) => {
 app.get("/testfreq/", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   graphDataSimple(req.query.item); 
+  var frequency =   graphDataSimple(req.query.item);
   res.json(frequency);
 });
 
 app.get("/testreg", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   reccomendation("Bob");
+  var frequency =   reccomendation("Bob", 50, -123);
   res.json(frequency);
 });
 
@@ -152,7 +152,7 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
      ;
    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
    var d = erad * c; // Distance in km
-
+   if(d == 0){d = 0.1;}
    return d;
 
  }
@@ -163,13 +163,21 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
 
 
 
- function reccomendation(user) {
+ function reccomendation(user, ulat, ulon) {
 //assuming one user data exissts
 let arr = [{
   item: transaction[0].item,
   count: 1,
 }];
-var suggested = [];
+var suggested = [{
+    item: transaction[0].item,
+    date: transaction[0].date,
+    price: transaction[0].price,
+    lat: transaction[0].lat,
+    lon: transaction[0].lon,
+    rank: 1,
+  }
+];
 let j = 0;
 var regEx = /[0-9]+/i;
 for (let i=1; i < transaction.length; i++ ){
@@ -187,15 +195,68 @@ for (let i=1; i < transaction.length; i++ ){
 arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
 console.log(arr);
 
+
+suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
+*(1/getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon))
+*(1/transaction[0].price) * freq(transaction[0].item, transaction) );
+
+//old return three highest user interactions
 for (k=0; k<transaction.length; k++){
     if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
-      suggested.push(transaction[k]);
+      suggested.push({item: transaction[k].item, date: transaction[k].date, price: transaction[k].price, lat: transaction[k].lat, lon: transaction[k].lon,
+        rank: arr[lookUp(transaction[k].item, arr)].count
+        *(1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon))
+        *(1/transaction[k].price) * freq(transaction[k].item, transaction) } );
+        console.log("lookup"+ arr[lookUp(transaction[k].item, arr)].count);
+        console.log("dist"+ 1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon));
+        console.log("price"+1/transaction[k].price);
+        console.log("freq"+freq(transaction[k].item, transaction));
+
     }
   }
+var rankedsuggested = [];
 
-  return suggested;
+suggested.sort(function (x, y){    return y.rank - x.rank;});
+
+for(i = 0; i < 40; i++){
+  rankedsuggested.push(suggested[i]);
+}
+//console.log(rankedsuggested);
+return rankedsuggested;
+/*
+for (k=0; k<transaction.length; k++){
+  suggested.push({
+    item: transaction[k].item,
+  date: transaction[k].date,
+  price: transaction[k].price,
+  lat: transaction[k].lat,
+  lon: transaction[k].lon,
+  rank: arr[lookUp(transaction[k].item, arr)]
+  *(1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon)!=0)
+  *(1/transaction[k].price * freq(transaction[k].item, transaction) ;
+  ,
+})
+
+}
+arr.sort(function (x, y){    return y.count - x.count;});
+*/
 }
 
+function lookUp(target, arr){
+var val = 0;
+  for(let i=0; i < arr.length; i++){
+    if(arr[i].item == target){ val  = i; break;}
+    }
+    return val
+}
+
+function freq(item, arr){
+  let sum = 0;
+  for(let i =0; i < arr.length; i++){
+    if(arr[i].item == item){ sum++;}
+  }
+  return sum;
+}
 
 function graphDataSimple(item){
   let freq = new Array(24);
