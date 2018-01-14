@@ -3,7 +3,7 @@ for (let i = 0; i < 24; i++) hours.push(i);
 
 var freq = [];
 
-var itemType = "water";
+var itemType = "item";
 const base_url = "https://nwhacks-transactions.herokuapp.com/testfreq/?item=";
 
 function getFrequency(url) {
@@ -51,7 +51,7 @@ getFrequency(base_url + itemType)
     //console.log(freq);
   })
   .catch(err => alert(err.message));
-  
+
 var selectTypes = new Vue({
   el: "#select_types",
   data: {
