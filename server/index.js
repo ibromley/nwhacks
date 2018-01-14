@@ -4,14 +4,25 @@ const app = express();
 const addr = process.env.ADDR || "localhost:4000";
 const [host, port] = addr.split(":");
 
+let allUserTransactions = [];
+let userNames = ["Alice", "Bob", "Chris", "Doris"];
+let items = ["coffee", "bagel", "sandwich", "milkshake", "water", "salad"];
+let transaction = generateTransactions(500);
+let mapsTrans = []; // list of all valid transactions for graph or map
+
+app.get("/trans", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.json(transaction);
+});
 
 app.get("/test", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //return all not-completed tasks in the database
-    let myJSON = getUserTransactions(req.params.name);
+    let myJSON = getUserTransactions(req.query.name);
     res.json(myJSON);
-    });
+});
 
 app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
@@ -37,23 +48,18 @@ app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
 });
 
-let allUserTransactions = [];
-let userNames = ["Alice", "Bob", "Chris", "Doris"];
-let items = ["coffee", "bagel", "sandwich", "milkshake", "water", "salad"]
-let transaction  = generateTransactions(500);
-let mapsTrans = []; // list of all valid transactions for graph or map
-
 function generateTransactions(num) {
   let trans = [num];
-  for (i = 0; i < num; i++) {
+  for (let i = 0; i < num; i++) {
     trans[i] = {
-      user: userNames[getRandomInRange(0, userNames.length, 0)],
-      item: items[getRandomInRange(0,items.length,0)],
+      user: userNames[Math.floor(Math.random() * userNames.length)],
+      item: items[Math.floor(Math.random() * items.length)],
       price: getRandomInRange(0.5, 30, 2),
       date: generateNewDate(),
       lat: getRandomInRange(48, 52, 4),
       lon: getRandomInRange(-122, -124, 4),
     }
+    
   }
   return trans;
 }
@@ -87,20 +93,18 @@ function getRandomInRange(from, to, fixed) {
     // .toFixed() returns string, so ' * 1' is a trick to convert to number
 }
 
-function getUserTransactions (name){
+function getUserTransactions (name) {
   var count = 0;
-  if (allUserTransactions != []) {
+  //console.log(transaction);
+  if (allUserTransactions !== []) {
     allUserTransactions = [];
   }
-
   for(let i = 0; i < transaction.length; i++) {
     if (transaction[i].user == name) {
        allUserTransactions.push(transaction[i]);
     }
   }
-
-   return allUserTransactions;
-
+  return allUserTransactions;
 }
 
 function graphTrans (data, item, startDate, endDate, lat, lon, radius){

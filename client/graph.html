@@ -105,39 +105,14 @@
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">inbox</i>Inbox</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Trash</a>
+          <a class="mdl-navigation__link" href="index.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Transactions</a>
+          <a class="mdl-navigation__link" href="suggest.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">inbox</i>Suggestions</a>
+          <a class="mdl-navigation__link" href="graph.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Graphs</a>
           <div class="mdl-layout-spacer"></div>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-        
-        <div class="mdl-grid" id="transactions-records">
-          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp transactions-table">
-            <thead>
-              <tr>
-                <th class="mdl-data-table__cell--non-numeric">User</th>
-                <th>Item</th>
-                <th>Price</th>
-                <th>Date</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="transaction in transactions">
-                <td class="mdl-data-table__cell--non-numeric">{{ transaction.user }}</td>
-                <td>{{ transaction.item }}</td>
-                <td>{{ transaction.price }}</td>
-                <td>{{ transaction.date }}</td>
-                <td>{{ transaction.lat }}</td>
-                <td>{{ transaction.lon }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </main>
     </div>
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" style="position: fixed; left: -1000px; height: -1000px;">
