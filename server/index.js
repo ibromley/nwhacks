@@ -47,10 +47,10 @@ app.get("/test3/:lat&:item", (req, res) => {
 
 });
 
-app.get("/testfreq", (req, res) => {
+app.get("/testfreq/", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   graphDataSimple("coffee");
+  var frequency =   graphDataSimple(req.query.item); 
   res.json(frequency);
 });
 
