@@ -61,9 +61,6 @@ app.get("/testreg", (req, res) => {
   res.json(frequency);
 });
 
-app.listen(port, host, () => {
-    console.log(`server is listening at http://${addr}....`);
-
 app.listen(port, () => {
     console.log(`server is listening at http://localhost:${port}....`);
 });
