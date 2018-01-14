@@ -167,23 +167,17 @@ function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
 
  function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
    var erad = 6371000; // Radius of the earth in m
-   console.log('lon1=' + lon1);
-   console.log('lon2=' + lon2);
    var dLat = deg2rad(lat2-lat1);  // deg2rad below
-   console.log('dLat=' + dLat);
    var dLon = deg2rad(lon2-lon1);
 
-   console.log('dLon=' + dLon);
    var a =
      Math.sin(dLat/2) * Math.sin(dLat/2) +
      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
      Math.sin(dLon/2) * Math.sin(dLon/2)
      ;
-     console.log('a=' + a);
    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-console.log('c=' + c);
    var d = erad * c; // Distance in km
- console.log('d=' + d);
+
    return d;
 
  }

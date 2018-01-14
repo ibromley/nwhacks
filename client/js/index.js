@@ -1,7 +1,8 @@
-var transTable = new Vue({
-    el: '#transactions-records',
+
+new Vue({
+    el: '#item-cards',
     data: {
-      transactions: []
+       name: 'Hello Vue.js!'
     },
     methods: {
         getData: function(url) {
@@ -11,6 +12,9 @@ var transTable = new Vue({
                 .catch(err => alert(err.message));
         },
     },
-});
+    beforeMount(){
+        this.getData()
+     },
+
 
 transTable.getData("http://localhost:4000/trans");
