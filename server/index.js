@@ -196,7 +196,7 @@ for (let i=1; i < transaction.length; i++ ){
 arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
 console.log(arr);
 
-suggest[0].distance = getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon));
+suggest[0].distance = getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon);
 
 suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 *(1/getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon))
@@ -205,11 +205,17 @@ suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 //old return three highest user interactions
 for (k=0; k<transaction.length; k++){
     if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
-      suggested.push({item: transaction[k].item, date: transaction[k].date, price: transaction[k].price, lat: transaction[k].lat, lon: transaction[k].lon,
-distance: getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon));
-        rank: arr[lookUp(transaction[k].item, arr)].count
+      suggested.push({
+          item: transaction[k].item, 
+          date: transaction[k].date, 
+          price: transaction[k].price, 
+          lat: transaction[k].lat, 
+          lon: transaction[k].lon,
+          distance: getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon),
+          rank: arr[lookUp(transaction[k].item, arr)].count
         *(1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon))
-        *(1/transaction[k].price) * freq(transaction[k].item, transaction) } );
+        *(1/transaction[k].price) * freq(transaction[k].item, transaction) 
+    });
         console.log("lookup"+ arr[lookUp(transaction[k].item, arr)].count);
         console.log("dist"+ 1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon));
         console.log("price"+1/transaction[k].price);
