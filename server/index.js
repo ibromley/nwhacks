@@ -54,10 +54,10 @@ app.get("/testfreq/", async (req, res) => {
   res.json(frequency);
 });
 
-app.get("/testreg", (req, res) => {
+app.get("/testrecco", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   reccomendation("Bob", 50, -123);
+  var frequency =   reccomendation(req.query.name, req.query.lat, req.query.lon);
   res.json(frequency);
 });
 
@@ -175,6 +175,7 @@ var suggested = [{
     price: transaction[0].price,
     lat: transaction[0].lat,
     lon: transaction[0].lon,
+    distance: 1,
     rank: 1,
   }
 ];
@@ -195,6 +196,7 @@ for (let i=1; i < transaction.length; i++ ){
 arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
 console.log(arr);
 
+suggest[0].distance = getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon));
 
 suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 *(1/getDistanceFromLatLonInM(transaction[0].lat, transaction[0].lon, ulat, ulon))
@@ -204,6 +206,7 @@ suggested[0].rank = (arr[lookUp(transaction[0].item, arr)].count
 for (k=0; k<transaction.length; k++){
     if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
       suggested.push({item: transaction[k].item, date: transaction[k].date, price: transaction[k].price, lat: transaction[k].lat, lon: transaction[k].lon,
+distance: getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon));
         rank: arr[lookUp(transaction[k].item, arr)].count
         *(1/getDistanceFromLatLonInM(transaction[k].lat, transaction[k].lon, ulat, ulon))
         *(1/transaction[k].price) * freq(transaction[k].item, transaction) } );
