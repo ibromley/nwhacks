@@ -200,10 +200,6 @@ for (k=0; k<transaction.length; k++){
 }
 
 
-
-
-
-
 function graphDataSimple(item){
   let freq = new Array(24);
   for (let i = 0; i < freq.length; i++) {
@@ -215,7 +211,7 @@ function graphDataSimple(item){
   for(i = 0; i < transaction.length; i++) {
     if( transaction[i].item  == item){ //if items match,
       freq[transaction[i].date.getHours()].count++; //increment count on the hour
-    }
   }
-  return freq;
+  }
+return freq;
 }
