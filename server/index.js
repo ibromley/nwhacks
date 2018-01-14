@@ -25,6 +25,8 @@ app.get("/test", (req, res) => {
 });
 
 app.get("/test2", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
   //reccomendation("Bob");
@@ -36,6 +38,8 @@ app.get("/test2", (req, res) => {
 
 
 app.get("/test3/:lat&:item", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
   graphTrans(transaction, req.params.item, d_start, d_end, req.params.lat, -123, 100000);
@@ -45,7 +49,8 @@ app.get("/test3/:lat&:item", (req, res) => {
 });
 
 app.get("/testfreq", (req, res) => {
-
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   var frequency =   graphDataSimple("coffee");
   res.json(frequency);
 });
