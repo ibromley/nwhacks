@@ -29,6 +29,7 @@ app.get("/test2", (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
+  //reccomendation("Bob");
   graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
   var myJSON = mapsTrans;
   res.json(myJSON);
@@ -43,6 +44,12 @@ app.get("/test3/:lat&:item", (req, res) => {
   var myJSON = mapsTrans;
   res.json(myJSON);
 
+});
+
+app.get("/testfreq", (req, res) => {
+
+  var frequency =   graphDataSimple("coffee");
+  res.json(frequency);
 });
 
 app.listen(port, host, () => {
@@ -60,7 +67,7 @@ function generateTransactions(num) {
       lat: getRandomInRange(48, 52, 4),
       lon: getRandomInRange(-122, -124, 4),
     }
-    
+
   }
   return trans;
 }
@@ -124,49 +131,6 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
       }
     }
 
-
-
-function isInside(latCenter, lonCenter, radius, latTest, lonTest){
-  let r = 6371000;
-  let dlon = lonTest - lonCenter;
-  let dlat = latTest - latCenter;
-  let a = Math.pow((Math.sin(dlat/2)), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow( (Math.sin(dlon/2)), 2);
-  let c = 2 * Math.pow(Math.atan( Math.sqrt(a), Math.sqrt(1-a) ), 2);
-  let d = r * c; //(where R is the radius of the Earth)
-  if (d <= radius){return 1;}
-  else {return 0;}
-}
-
-//TODO currently only checking Lat. Long not working.
-function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
-  return ( latCenter + radius > latTest &&
-           latCenter - radius < latTest);// && // latTest between latCenter +- radius
-        //   lonCenter + radius < lonTest &&
-        //   lonCenter - radius > lonTest); // lonTest between lonCenter +- radius
-
-/*
-  var eRad = 6517219; // metres
-  var latCenter_rad = Math.radians(latCenter);
-  var latTest_rad = Math.radians(latTest);
-  var dlat = Math.radians(latTest-latCenter);
-  var dlon = Math.radians(lonTest-lonCenter);
-
-  var a = Math.sin(dlat/2) * Math.sin(dlat/2) +
-        Math.cos(latCenter) * Math.cos(latTest) *
-        Math.sin(dlon/2) * Math.sin(dlon/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-  var d = eRad * c;
-
-  return (radius < d);
-  */
-}
-
- Math.radians = function (degrees) {
-   return degrees* Math.PI/180;
- };
-
-
  function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
    var erad = 6371000; // Radius of the earth in m
    var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -187,3 +151,51 @@ function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
  function deg2rad(deg) {
    return deg * (Math.PI/180)
  }
+
+
+/*
+ function reccomendation(user) {
+//assuming one user data exissts
+let arr = [{item, count}];
+for (i=0, i<data.length);i++){
+if (arr.includes({data[i].item}, /[0-9]+/)) {
+    for (j=0, j<arr.length); i++) {
+      if (arr[j].item == data[i].item) {
+        arr[j].count++;
+      }
+    } else {
+      arr.push({item: data[i],
+                count: 1});
+    }
+}
+}
+}
+
+//sorting 2d array by item commonality
+userCommonItems.sort(function (a, b){
+
+  if (a[1] === b[1]) {        return 0;    }
+  else {      return (a[1] > b[1]) ? -1 : 1;    }
+
+
+});
+console.log(userCommonItems[0], userCommonItems[1], userCommonItems[2]);
+}
+*/
+
+
+function graphDataSimple(item){
+  let freq = new Array(24);
+  for (let i = 0; i < freq.length; i++) {
+     freq[i] = {
+      count: 0,
+    }
+  }
+
+  for(i = 0; i < transaction.length; i++) {
+    if( transaction[i].item  == item){ //if items match,
+      freq[transaction[i].date.getHours()].count++; //increment count on the hour
+    }
+  }
+  return freq;
+}
