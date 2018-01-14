@@ -55,6 +55,13 @@ app.get("/testfreq", (req, res) => {
   res.json(frequency);
 });
 
+app.get("/testreg", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  var frequency =   reccomendation("Bob");
+  res.json(frequency);
+});
+
 app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
 });
@@ -156,28 +163,34 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
  }
 
 
-/*
+
  function reccomendation(user) {
 //assuming one user data exissts
-data = transaction;
-let arr = [];
-let suggested = [];
+let arr = [{
+  item: transaction[0].item,
+  count: 1,
+}];
+var suggested = [];
 let j = 0;
-for (let i=0; i < data.length; i++ ){
-  if (arr.includes({data[i].item, /[0-9]+/})) {
+var regEx = /[0-9]+/i;
+for (let i=1; i < transaction.length; i++ ){
+  /*if (arr.includes({item: transaction[i].item,
+                    count: regEx,})) {*/
+      let indexed = 0;
       for (j=0; j<arr.length; j++) {
-        if (arr[j].item == data[i].item) { arr[j].count++; break;}
-          }
-    if (arr[j].item != data[i].item){   arr.push({item: data[i], count: 1});
+        if (arr[j].item != transaction[i].item) {}
+        else {  arr[j].count++; indexed = 1; }
+    //}
     }
-}
+      if(indexed == 0) {arr.push({item: transaction[i].item, count: 1});}
 }
 
-arr.sort(function (x, y){    return x.count - y.count;}); // sort arr by highest count (suppoosedly)
+arr.sort(function (x, y){    return y.count - x.count;}); // sort arr by highest count (suppoosedly)
+console.log(arr);
 
-for (i=0; i<data.length; i++){
-    if( data[i].item == arr[0].item ||data[i].item == arr[2].item ||data[i].item == arr[1].item){
-      sugggested.push(data[i]);
+for (k=0; k<transaction.length; k++){
+    if( transaction[k].item == arr[0].item || transaction[k].item == arr[2].item ||transaction[k].item == arr[1].item){
+      suggested.push(transaction[k]);
     }
   }
 
@@ -185,7 +198,7 @@ for (i=0; i<data.length; i++){
 }
 
 
-*/
+
 
 
 
