@@ -14,9 +14,9 @@ app.get("/usertransactions/:name", (req, res) => {
 app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
-  graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 1000);
-  var myJSON = JSON.stringify(mapsTrans);
-  res.send(myJSON);
+  graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
+  var myJSON = mapsTrans;
+  res.json(myJSON);
 
 });
 
@@ -39,7 +39,7 @@ function generateTransactions(num) {
       price: getRandomInRange(0.5, 30, 2),
       date: generateNewDate(),
       lat: getRandomInRange(48, 52, 4),
-      long: getRandomInRange(-121, -125, 4),
+      lon: getRandomInRange(-122, -124, 4),
     }
   }
   return trans;
@@ -93,7 +93,7 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
     if(data[i].item == item){
       if (data[i].date.getTime() > startDate.getTime() &&
           data[i].date.getTime() < endDate.getTime()) {
-            if (isInsideBox(lat, lon, radius, data[i].lat, data[i].lon)) {
+            if (getDistanceFromLatLonInM(lat, lon, data[i].lat, data[i].lon) < radius) {
               mapsTrans.push(data[i]);
             }
           }
@@ -142,3 +142,31 @@ function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
  Math.radians = function (degrees) {
    return degrees* Math.PI/180;
  };
+
+
+ function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
+   var erad = 6371000; // Radius of the earth in m
+   console.log('lon1=' + lon1);
+   console.log('lon2=' + lon2);
+   var dLat = deg2rad(lat2-lat1);  // deg2rad below
+   console.log('dLat=' + dLat);
+   var dLon = deg2rad(lon2-lon1);
+
+   console.log('dLon=' + dLon);
+   var a =
+     Math.sin(dLat/2) * Math.sin(dLat/2) +
+     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+     Math.sin(dLon/2) * Math.sin(dLon/2)
+     ;
+     console.log('a=' + a);
+   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+console.log('c=' + c);
+   var d = erad * c; // Distance in km
+ console.log('d=' + d);
+   return d;
+
+ }
+
+ function deg2rad(deg) {
+   return deg * (Math.PI/180)
+ }
