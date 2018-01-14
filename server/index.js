@@ -9,18 +9,26 @@ app.get("/test", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //return all not-completed tasks in the database
-    var myJSON = getUserTransactions("Bob");
+    let myJSON = getUserTransactions(req.params.name);
     res.json(myJSON);
-});
+    });
 
 app.get("/test2", (req, res) => {
-getUserTransactions("Bob");
-var d_start = new Date(2014, 10, 10, 10, 11, 19, 400);
-var d_end = new Date(2017, 10, 10, 10, 11, 19, 400);
+  var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
+  var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
+  graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
+  var myJSON = mapsTrans;
+  res.json(myJSON);
 
-  graphTrans(transaction, "coffee", d_start, d_end, 49.2827, 123, 10000);
-  var myJSON = JSON.stringify(mapsTrans);
-  res.send(myJSON);
+});
+
+
+app.get("/test3/:lat&:item", (req, res) => {
+  var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
+  var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
+  graphTrans(transaction, req.params.item, d_start, d_end, req.params.lat, -123, 100000);
+  var myJSON = mapsTrans;
+  res.json(myJSON);
 
 });
 
@@ -38,12 +46,12 @@ function generateTransactions(num) {
   let trans = [num];
   for (i = 0; i < num; i++) {
     trans[i] = {
-      user: userNames[getRandomInRange(0, 3, 0)],
-      item: items[getRandomInRange(0,5,0)],
+      user: userNames[getRandomInRange(0, userNames.length, 0)],
+      item: items[getRandomInRange(0,items.length,0)],
       price: getRandomInRange(0.5, 30, 2),
       date: generateNewDate(),
       lat: getRandomInRange(48, 52, 4),
-      long: getRandomInRange(121, 125, 4),
+      lon: getRandomInRange(-122, -124, 4),
     }
   }
   return trans;
@@ -67,9 +75,9 @@ function generateNewDate() {
                   month,
                   days,
                   getRandomInRange(0,23,0), //hour
-                  getRandomInRange(0,60,0), //minute
-                  getRandomInRange(0,60,0), //second
-                  getRandomInRange(0,100,0)); //millisecond
+                  getRandomInRange(0,59,0), //minute
+                  getRandomInRange(0,59,0), //second
+                  getRandomInRange(0,999,0)); //millisecond
   return d;
 }
 
@@ -80,34 +88,37 @@ function getRandomInRange(from, to, fixed) {
 
 function getUserTransactions (name){
   var count = 0;
-  allUserTransactions = [];
-  for(i=0; i < transaction.length; i++ ){
-    if (transaction[i].user == name) {
+  if (allUserTransactions != []) {
+    allUserTransactions = [];
+  }
 
+  for(let i = 0; i < transaction.length; i++) {
+    if (transaction[i].user == name) {
        allUserTransactions.push(transaction[i]);
-      }
     }
+  }
 
    return allUserTransactions;
 
-};
+}
 
-function graphTrans (transaction, item, startDate, endDate, lat, lon, radius){
-  for(i=0; i < transaction.length; i++ ){
-    if(transaction[i].item == item){
-      if(transaction[i].date.getFullYear() < endDate.getFullYear() && transaction[i].date.getFullYear() > startDate.getFullYear()){
-        if(transaction[i].date.getMonth() < endDate.getMonth() && transaction[i].date.getMonth() > startDate.getMonth()){
-          if(transaction[i].date.getDate() < endDate.getDate() && transaction[i].date.getDate() > startDate.getDate()){
-            if (isInsideBox(lat, lon, radius, transaction[i].lat, transaction[i].lon) == true){
-
-              mapsTrans.push(transcation[i]);
+function graphTrans (data, item, startDate, endDate, lat, lon, radius){
+  if ( mapsTrans != []) {
+    mapsTrans = [];
+  }
+  for(i=0; i < data.length; i++ ){
+    if(data[i].item == item){
+      if (data[i].date.getTime() > startDate.getTime() &&
+          data[i].date.getTime() < endDate.getTime()) {
+            if (getDistanceFromLatLonInM(lat, lon, data[i].lat, data[i].lon) < radius) {
+              mapsTrans.push(data[i]);
             }
           }
         }
       }
     }
-    }
-};
+
+
 
 function isInside(latCenter, lonCenter, radius, latTest, lonTest){
   let r = 6371000;
@@ -118,10 +129,61 @@ function isInside(latCenter, lonCenter, radius, latTest, lonTest){
   let d = r * c; //(where R is the radius of the Earth)
   if (d <= radius){return 1;}
   else {return 0;}
-};
-
-function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
-  if( latCenter+radius < latTest && latCenter - radius > latTest && lonCenter+radius < lonTest && lonCenter - radius > lonTest  )
-  {return true;}
-  else{return false;}
 }
+
+//TODO currently only checking Lat. Long not working.
+function isInsideBox(latCenter, lonCenter, radius, latTest, lonTest){
+  return ( latCenter + radius > latTest &&
+           latCenter - radius < latTest);// && // latTest between latCenter +- radius
+        //   lonCenter + radius < lonTest &&
+        //   lonCenter - radius > lonTest); // lonTest between lonCenter +- radius
+
+/*
+  var eRad = 6517219; // metres
+  var latCenter_rad = Math.radians(latCenter);
+  var latTest_rad = Math.radians(latTest);
+  var dlat = Math.radians(latTest-latCenter);
+  var dlon = Math.radians(lonTest-lonCenter);
+
+  var a = Math.sin(dlat/2) * Math.sin(dlat/2) +
+        Math.cos(latCenter) * Math.cos(latTest) *
+        Math.sin(dlon/2) * Math.sin(dlon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  var d = eRad * c;
+
+  return (radius < d);
+  */
+}
+
+ Math.radians = function (degrees) {
+   return degrees* Math.PI/180;
+ };
+
+
+ function getDistanceFromLatLonInM(lat1, lon1, lat2, lon2) {
+   var erad = 6371000; // Radius of the earth in m
+   console.log('lon1=' + lon1);
+   console.log('lon2=' + lon2);
+   var dLat = deg2rad(lat2-lat1);  // deg2rad below
+   console.log('dLat=' + dLat);
+   var dLon = deg2rad(lon2-lon1);
+
+   console.log('dLon=' + dLon);
+   var a =
+     Math.sin(dLat/2) * Math.sin(dLat/2) +
+     Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+     Math.sin(dLon/2) * Math.sin(dLon/2)
+     ;
+     console.log('a=' + a);
+   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+console.log('c=' + c);
+   var d = erad * c; // Distance in km
+ console.log('d=' + d);
+   return d;
+
+ }
+
+ function deg2rad(deg) {
+   return deg * (Math.PI/180)
+ }
