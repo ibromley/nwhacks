@@ -76,6 +76,9 @@ function getRandomInRange(from, to, fixed) {
 
 function getUserTransactions (name){
 var count = 0;
+if (allUserTransactions != []) {
+  allUserTransactions = [];
+}
 
 for(i=0; i < transaction.length; i++ ){
   if (transaction[i].user == name) {
