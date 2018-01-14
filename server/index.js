@@ -20,6 +20,16 @@ app.get("/test2", (req, res) => {
 
 });
 
+
+app.get("/test3/:lat&:item", (req, res) => {
+  var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
+  var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
+  graphTrans(transaction, req.params.item, d_start, d_end, req.params.lat, -123, 100000);
+  var myJSON = mapsTrans;
+  res.json(myJSON);
+
+});
+
 app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
 });
@@ -92,6 +102,9 @@ for(i=0; i < transaction.length; i++ ){
 }
 
 function graphTrans (data, item, startDate, endDate, lat, lon, radius){
+  if ( mapsTrans != []) {
+    mapsTrans = [];
+  }
   for(i=0; i < data.length; i++ ){
     if(data[i].item == item){
       if (data[i].date.getTime() > startDate.getTime() &&
