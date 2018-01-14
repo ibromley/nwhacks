@@ -6,9 +6,6 @@ function loadMap() {
     }
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-    // Load JSON Data
-    let hotelMarkers = getJSONMarkers();
-
 
     url = "http://localhost:4000/test2";
     fetch(url)

@@ -25,6 +25,8 @@ app.get("/test", (req, res) => {
 });
 
 app.get("/test2", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
   graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
