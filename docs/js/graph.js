@@ -4,7 +4,7 @@ for (let i = 0; i < 24; i++) hours.push(i);
 var freq = [];
 
 var itemType = "water";
-const base_url = "http://localhost:4000/testfreq/?item=";
+const base_url = "http://nwhacks-transactions.herokuapp.com/testfreq/?item=";
 
 function getFrequency(url) {
     return fetch(url)

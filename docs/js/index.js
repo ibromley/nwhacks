@@ -13,4 +13,4 @@ var transTable = new Vue({
     },
 });
 
-transTable.getData("http://localhost:4000/trans");
+transTable.getData("http://nwhacks-transactions.herokuapp.com/trans");

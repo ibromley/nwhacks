@@ -7,7 +7,7 @@ function loadMap() {
     const map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
 
-    url = "http://localhost:4000/test2";
+    url = "http://nwhacks-transactions.herokuapp.com/test2";
     fetch(url)
         .then(response => response.json())
         .then(data => {
