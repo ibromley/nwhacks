@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 
-const addr = process.env.ADDR || "localhost:4000";
-const [host, port] = addr.split(":");
+var port = process.env.PORT || 4000;
 
 let allUserTransactions = [];
 let userNames = ["Alice", "Bob", "Chris", "Doris"];
@@ -64,6 +63,9 @@ app.get("/testreg", (req, res) => {
 
 app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
+
+app.listen(port, () => {
+    console.log(`server is listening at http://localhost:${port}....`);
 });
 
 function generateTransactions(num) {
