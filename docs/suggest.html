@@ -113,9 +113,9 @@
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
       </div>
-      <main class="mdl-layout__content mdl-color--grey-100">
-        <form v-on:submit.prevent="getData" id="recco_form">
-          <div class="mdl-textfield mdl-js-textfield">
+      <main class="mdl-layout__content mdl-color--grey-100" id="recco_container">
+        <form v-on:submit.prevent="updateReccoList" style="padding: 10px; text-align: center;">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input v-model="name" class="mdl-textfield__input" type="text" id="sample1">
             <label class="mdl-textfield__label" for="sample1">Name</label>
           </div>
@@ -134,39 +134,35 @@
               </button>
                 
         </form>
-        <div class="mdl-grid" id="item-cards">
+        <div class="mdl-grid">
+
+          <h4 style="margin: auto; color: #454545; font-weight: 300;" v-if="reccoList.length === 0">Enter inputs to find recommendations.</h4>
 
           <!-- items suggested for the user -->
           <!-- item start -->
-          <div class="item-card mdl-card mdl-shadow--2dp mdl-cell mdl-cell--9-col" v-for="recco in reccoList">
-            <div class="item-info mdl-grid">
-              <div class="item-image"></div>
-              <div class="item-text">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">{{ recco.name }}</h2>
-                </div>
-                <div class="mdl-card__supporting-text">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Mauris sagittis pellentesque lacus eleifend lacinia...
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                    Get Started
-                  </a>
-                </div>
-              </div>
+
+          <style>
+          .demo-card-square.mdl-card {
+            max-height: 320px;
+          }
+          .demo-card-square > .mdl-card__title {
+            color: #fff;
+            background: bottom right 15% no-repeat #46B6AC;
+          }
+          </style>
+
+          <div class="demo-card-square mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col" v-for="recco in reccoList">
+            <div class="mdl-card__title mdl-card--expand">
+              <h2 class="mdl-card__title-text">{{ recco.item }}</h2>
             </div>
-            <div class="map-container" style="min-height: 300px; background: #f3f3f3;">
-              <p style="padding: 100px; text-align:center;">show location on gmap</p>
-            </div>
-            
-            <div class="mdl-card__menu">
-              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                <i class="material-icons">more_vert</i>
-              </button>
+            <div class="mdl-card__supporting-text">
+              <ul>
+                <li><strong>Price:</strong>${{ recco.price }}</li>
+                <li><strong>Location:</strong>{{ recco.lat }}, {{ recco.item.lon }}</li>
+                <li><strong>Distance:</strong>{{ Math.floor(recco.distance) }} (m)</li>
+              </ul>
             </div>
           </div>
-          <!-- item end -->
         </div>
 
       </main>

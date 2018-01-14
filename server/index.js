@@ -57,10 +57,10 @@ app.get("/testfreq/", async (req, res) => {
   res.json(frequency);
 });
 
-app.get("/testreg", (req, res) => {
+app.get("/testrecco", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  var frequency =   reccomendation("Bob", 50, -123);
+  var frequency =  reccomendation(req.query.name, req.query.lat, req.query.lon);
   res.json(frequency);
 });
 

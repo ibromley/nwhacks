@@ -1,19 +1,11 @@
-var suggestion = new Vue({
-    el: '#recco_form',
+var recco = new Vue({
+    el: "#recco_container",
     data: {
-       valid: false,
-       name: "",
-       lat: 0,
-       lon: 0
-    },
-    methods: {
-    },
-});
-
-var cards = new Vue({
-    el: "#item-cards",
-    data: {
-      reccoList: []
+      valid: false,
+      name: "",
+      lat: 0,
+      lon: 0,
+      reccoList: [],
     },
     methods: {
       updateReccoList: function() {
