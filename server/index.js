@@ -44,6 +44,12 @@ app.get("/test3/:lat&:item", (req, res) => {
 
 });
 
+app.get("/testfreq/:item", (req, res) => {
+
+  var freq =   graphDataSimple(req.params.item);;
+  res.json(freq);
+});
+
 app.listen(port, host, () => {
     console.log(`server is listening at http://${addr}....`);
 });
@@ -59,7 +65,7 @@ function generateTransactions(num) {
       lat: getRandomInRange(48, 52, 4),
       lon: getRandomInRange(-122, -124, 4),
     }
-    
+
   }
   return trans;
 }
@@ -148,40 +154,19 @@ function graphTrans (data, item, startDate, endDate, lat, lon, radius){
 /*
  function reccomendation(user) {
 //assuming one user data exissts
-    let userData = getUserTransactions(user);
-    let userCommonItems = [
-
-
-    ];
-    let itemIndexed = 0;
-    for(let i = 0; i < userData.length; i++){
-      if()
-
-
+let arr = [{item, count}];
+for (i=0, i<data.length);i++){
+if (arr.includes({data[i].item}, /[0-9]+/)) {
+    for (j=0, j<arr.length); i++) {
+      if (arr[j].item == data[i].item) {
+        arr[j].count++;
+      }
+    } else {
+      arr.push({item: data[i],
+                count: 1});
     }
-
-
-    {
-      item: ,//userData[0].item,
-      count: ,//1,
-    }];
-    let itemIndexed = 0;
-    let n = 0;
-
-    for(let i=0; i< userData.length; i++){
-      itemIndexed = 0;
-        for(n=1; n<userData.length-1; n++ ){
-          if(userCommonItems[n].item == userData[i].item){
-            itemIndexed = 1;
-            break;
-            }
-          }
-        if( itemIndexed == 0 ){
-          userCommonItems.push({item: userData[i].item, count: (userCommonItems+1)});
-          }
-        else if(itemIndexed == 1){
-        userCommonItems[n].count++;
-    }
+}
+}
 }
 
 //sorting 2d array by item commonality
@@ -194,8 +179,8 @@ userCommonItems.sort(function (a, b){
 });
 console.log(userCommonItems[0], userCommonItems[1], userCommonItems[2]);
 }
-
 */
+
 
 function graphDataSimple(item){
   let data = getUserTransactions();
@@ -204,7 +189,7 @@ function graphDataSimple(item){
   for(i = 0; i <freq.length; i++ ){ freq[i] = 0;}
 
   for(i = 0; i < data.length; i++){
-    if( data[i].item  == item){ freq[getHour(data.date)]++;}
+    if( data[i].item  == item){ freq[getHour(data[i].date)]++;}
   }
   return freq;
 }
