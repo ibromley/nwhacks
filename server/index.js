@@ -5,9 +5,11 @@ const addr = process.env.ADDR || "localhost:4000";
 const [host, port] = addr.split(":");
 
 
-app.get("/usertransactions/:name", (req, res) => {
+app.get("/test", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     //return all not-completed tasks in the database
-    var myJSON = getUserTransactions(req.params.name);
+    let myJSON = getUserTransactions(req.params.name);
     res.json(myJSON);
     });
 
@@ -15,6 +17,16 @@ app.get("/test2", (req, res) => {
   var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
   var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
   graphTrans(transaction, "coffee", d_start, d_end, 49.2827, -123, 100000);
+  var myJSON = mapsTrans;
+  res.json(myJSON);
+
+});
+
+
+app.get("/test3/:lat&:item", (req, res) => {
+  var d_start = new Date(2014, 1, 1, 0, 0, 0, 0);
+  var d_end = new Date(2017, 12, 12, 59, 59, 59, 999);
+  graphTrans(transaction, req.params.item, d_start, d_end, req.params.lat, -123, 100000);
   var myJSON = mapsTrans;
   res.json(myJSON);
 
@@ -75,24 +87,29 @@ function getRandomInRange(from, to, fixed) {
 }
 
 function getUserTransactions (name){
-var count = 0;
-if (allUserTransactions != []) {
-  allUserTransactions = [];
-}
+  var count = 0;
+  if (allUserTransactions != []) {
+    allUserTransactions = [];
+  }
 
-for(i=0; i < transaction.length; i++ ){
-  if (transaction[i].user == name) {
-
-     allUserTransactions.push(transaction[i]);
+  for(let i = 0; i < transaction.length; i++) {
+    if (transaction[i].user == name) {
+       allUserTransactions.push(transaction[i]);
     }
   }
 
- return allUserTransactions;
+   return allUserTransactions;
 
 }
 
 function graphTrans (data, item, startDate, endDate, lat, lon, radius){
+<<<<<<< HEAD
 
+=======
+  if ( mapsTrans != []) {
+    mapsTrans = [];
+  }
+>>>>>>> e24bc82c376cf3acd3b809aed6968092d421c860
   for(i=0; i < data.length; i++ ){
     if(data[i].item == item){
       if (data[i].date.getTime() > startDate.getTime() &&
