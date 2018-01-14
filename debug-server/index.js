@@ -12,8 +12,6 @@ app.use(morgan(process.env.LOG_FORMAT || "dev"));
 
 
 
-
-
 const db = new sqlite3.Database('data.db');
  
 db.serialize(function() {
@@ -39,6 +37,8 @@ db.serialize(function() {
     });
 
     app.get("/all", (req, res) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         //let user = JSON.parse(userJSON);
         res.json(objects);
     });
